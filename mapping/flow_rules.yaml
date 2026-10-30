@@ -1,0 +1,46 @@
+# Rules that drive the swimlane flowchart images (read at runtime).
+# Edit this file - no code change needed.
+
+# Work Groups that never appear in the diagram (they stay in the task table).
+excluded_work_groups: [external, system]
+
+# Tasks whose name STARTS WITH one of these are left out of the diagram.
+# "ADD REWORK ACTIVITY" covers ADD REWORK ACTIVITY1, 2, 3 ...
+excluded_task_prefixes:
+  - "OM SR_REQ"
+  - "WAIT FOR AM RESPOND"
+  - "ADD REWORK ACTIVITY"
+  - "SET AM INVOLV BLANK"
+  - "RECONFIRM W/CUSTOMER"
+
+# Tasks performed in these IT systems always go in a lane named after the
+# system, whatever their Work Group says (e.g. CRM tasks of DELETE whose
+# Work Group is "<SECTION HANDLED BY>-FO" / "-MGR" all sit in the CRM lane).
+it_system_lanes: [CRM]
+
+# Work Groups that always share one swimlane. (Left = name in Excel, right = lane title.)
+lane_aliases: {}
+
+# Work Groups merged into ONE lane, but only when two or more of them occur in the
+# same order type (CREATE has both; DELETE has only "CEN-CSC-MS" and keeps its own name).
+lane_merges:
+  - lanes: ["CEN-CSC-MS", "ISEC-OPR CEN-CSC-MS"]
+    title: "ISEC-OPR"
+
+# Left-to-right lane order. Lanes not listed follow, in order of first use.
+lane_order: ["CRM", "<RTOM>-DSC-PROV", "CEN-CSC-MS", "AUTO", "ISEC-OPR"]
+
+# Tasks that share ONE sequence number:
+#   * Work Activity: the task name starts with "WA-" (e.g. WA-MODIFY CPE, WA-20-CONNECT CPE).
+#     It is attached to its work order task with a DOUBLE-HEADED arrow.
+#   * Parallel tasks: same sequence number, names NOT starting with "WA-". They run in
+#     parallel: the flow forks into all of them and joins again before the next step.
+work_activity_pattern: '^WA\s*-'
+
+# Optional: for a single-task step with work activities, the task the flow continues
+# from (default: the first). Example:
+#   - {order_type: "CREATE", seq: "10", task: "WA-MODIFY CPE"}
+exit_task_overrides: []
+
+# Words kept in capitals when task names / lane names are shown in Title Case.
+acronyms: [CPE, SO, ID, SLT, CRM, OSS, SVS, SR, AM, OR, WA, QOS, IP, SIM, LTE]

@@ -1,0 +1,35 @@
+Template-based BPM Service Delivery Guide Pipeline
+Updated: 2026-10-29
+Platform v1.1: app.py is now a shell; GuideX moved to tools/guidex; new tool TestX (Test Case Generator) in tools/testx.
+Key changes:
+- Uses the supplied Word template as the document master.
+- Template Heading 1-3 visual formatting is copied into numbering-free styles.
+- Generated section numbers are explicit and deterministic.
+- Workflow sections use 4, 4.1, 4.1.1; then 5, 5.1, 5.1.1; etc.
+- The editable task-flow diagram is placed directly under 4.1 / 5.1 / 6.1 ...; the 4.1.1 Task Flow heading follows the diagram and owns the task table.
+- Level 4+ headings render as bold Normal text.
+- The Product Hierarchy narrative/list of product components is omitted; the section proceeds directly to attributes/values.
+- Section 1.1 now renders each Special Requirement as text and only inserts tables detected beneath that specific requirement; the entire requirement list is never rendered as one table.
+- Section 3 now reads 5.1 MDM_Order Scenarios from Excel. Business Scenario maps from Service Type; CRM Order Sub Type maps from Order Sub Type; CRM Order Condition maps from Condition; OSS Service Order maps from Order Type. Rows without an Order Type are ignored.
+- YAML order_scenarios input remains as a fallback when 5.1 is unavailable or contains no usable rows.
+- Adds editable Word swimlane task-flow diagrams generated from Task Seq., Task Name, IT System and Work Group.
+- Flowchart task boxes are standard process rectangles; Start/End are oval terminators.
+- Process/Start/End symbols use one consistent width and height within each diagram panel and a light-blue palette.
+- Task sequence controls ordering but is not printed inside flowchart boxes.
+- Swimlane, task-box, connector, start/end and continuation shapes are independent Word VML objects rather than one grouped object.
+- Blank Work Group falls back to IT System for the swimlane; External/System tasks are excluded from diagrams only.
+- Adds 6.4 Work Order Description extraction using Order Type + Task Name matching.
+- Task detail pages populate Task Owner from Work Group and Description from sheet 6.4.
+- Business Rule, Work Instructions and Required Information & Sources labels are bold.
+- Enforces Times New Roman across the final document, including template text, headers/footers, tables and generated flowchart text.
+- Adds --no-flowchart CLI switch to disable diagram generation when required.
+- Moving a task shape does not automatically reroute or reattach its connector; connectors remain independent editable objects.
+- Repeated Attribute rows in 2. Product Hierarchy are consolidated by attribute name, with unique LOV values merged under one attribute.
+- Section 1.1 no longer renders the complete Special Requirements list as a single table; requirement-specific embedded tables are rendered directly beneath their corresponding requirement text.
+- Repeated Attribute rows in 2. Product Hierarchy are consolidated by attribute name, with unique LOV values merged under one attribute.
+1.1-images-and-tables
+1.2-strict-sequence-conditions
+1.3-delete-reference-pptx
+web-app-1.0
+bpm-studio-ui-1.0
+1.4-wa-parallel-pagefit

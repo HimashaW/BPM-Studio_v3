@@ -1,0 +1,91 @@
+# Maps User Guide sections to their Excel source.
+# This file documents the mapping implemented in the extractors/ and
+# render/ code - it's a reference, not (yet) a config the pipeline reads
+# at runtime. Edit alongside code changes so it stays accurate.
+#
+# status: "generated"  -> fully automated from extractor data
+# status: "stub"       -> source not yet found in the uploaded workbook;
+#                          pipeline shows a placeholder and a warning
+# status: "manual"     -> intentionally hand-authored (e.g. via YAML input),
+#                          no Excel source confirmed yet
+
+title_page:
+  title: "{product}"          # product name passed via --product CLI arg
+  status: generated
+
+sections:
+  - number: "1"
+    title: "Introduction"
+    status: generated
+    extractor: extractors.product_description.extract_product_description
+    source_sheets: ["1. Product Description"]
+    notes: "UNVALIDATED - built to spec, not yet tested against a real sheet"
+
+  - number: "1.1"
+    title: "Product-related Business Rules"
+    status: generated
+    extractor: extractors.special_requirements.extract_business_rules
+    source_sheets: ["3. Special Requirements"]
+    source_column: "Requirement Description"
+    notes: "UNVALIDATED - built to spec, not yet tested against a real sheet"
+
+  - number: "2"
+    title: "Product Hierarchy"
+    status: generated
+    extractor: extractors.product_hierarchy.extract_hierarchy
+    source_sheets: ["2. Product Hierarchy"]
+    notes: "UNVALIDATED. Anchors: column C = 'Product'/'Product Component', name in column D."
+
+  - number: "2.1.{i}"
+    title: "{hierarchy_node.name}"
+    status: generated
+    notes: "One subsection per Product/Product Component node found in sheet 2, in row order"
+
+  - number: "2.1.{i}.1"
+    title: "Attribute Definitions"
+    status: generated
+    extractor: extractors.product_hierarchy.extract_hierarchy
+    source_sheets: ["2. Product Hierarchy"]
+    notes: >
+      Rows tagged 'Attribute' in column C, directly below a Product/
+      Product Component anchor row, until the next anchor. Columns
+      'Entity Name', 'Mandatory?', 'Comments' rendered as a table.
+
+  - number: "2.1.{i}.2"
+    title: "Attribute List of Values"
+    status: stub
+    source_sheets: []
+    notes: "No source identified yet"
+
+  - number: "3"
+    title: "Order Types with Descriptions"
+    status: generated
+    source_sheets: ["5.1 MDM_Order Scenarios"]
+    manual_input: "input/order_scenarios.yaml"
+    notes: >
+      Excel is the primary source. Business Scenario <- Service Type;
+      CRM Order Sub Type <- Order Sub Type; CRM Order Condition <- Condition;
+      OSS Service Order <- Order Type. Rows without Order Type are ignored.
+      YAML remains an optional fallback.
+
+  - number: "4-N"
+    title: "Workflow Diagram - {order_type} Order Type"
+    status: generated
+    extractor: extractors.stacked_tables.extract_order_types
+    source_sheets: ["6.3 OSS SO Task List"]
+    group_by: order_type
+    render_as: workflow_page_per_group
+    notes: "One section per order type found - count is dynamic, not fixed to CREATE/DELETE"
+    subsections:
+      - number: "{n}.1"
+        title: "{product}"
+      - number: "{n}.1.1"
+        title: "Task Flow - {product}"
+        render_as: task_table
+        notes: "Editable flowchart is rendered under {n}.1 before this heading; task detail table follows."
+
+  - number: "{N+1}"
+    title: "Fault Handling Process"
+    status: stub
+    source_sheets: []
+    notes: "Source sheet not yet identified - confirm with document owner"

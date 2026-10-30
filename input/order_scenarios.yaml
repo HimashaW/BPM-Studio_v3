@@ -1,0 +1,8 @@
+# Manual input for the Section 3 order-scenario table, since no Excel
+# source has been confirmed for this content yet. Delete this file (or
+# leave it absent) to fall back to placeholder rows in the generated doc.
+#
+# - business_scenario: "New customer activation"
+#   crm_order_sub_type: "CREATE"
+#   crm_order_condition: "New Install"
+#   oss_service_order: "SO_CREATE"
