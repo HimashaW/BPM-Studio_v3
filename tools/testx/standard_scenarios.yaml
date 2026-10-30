@@ -1,0 +1,19 @@
+# Standard scenarios TestX adds to every product when the workbook shows they apply.
+# Edit freely - no code change needed. {product} is replaced by the product name.
+#
+#   when:       always | bss | test_service | pricing     (bss = any attribute/product is mapped to BSS or has price plans)
+#   order_type: CREATE, MODIFY-SERVICE, DELETE, ...        it_system: CRM | OSS | BSS
+#   core:       true = ticked by default on the Review step
+- when: test_service
+  order_type: CREATE
+  it_system: OSS
+  core: true
+  scenario: "Verify Test Service Registration prevents zero-billing.\n1. Submit an order with the 'Test' service category parameter."
+  oss: "The Test Service Registration process is triggered."
+
+- when: bss
+  order_type: CREATE
+  it_system: BSS
+  core: true
+  scenario: "Verify the generated test bill for {product} is accurate."
+  bss: "The bill correctly reflects the charges for all ordered products."
